@@ -1,0 +1,7 @@
+{
+	"homepage": "https://code.google.com/p/conemu-maximus5",
+	"version": "140814",
+	"url": "https://master-dl.sourceforge.net/project/conemu/Preview/ConEmuPack.140814.7z",
+	"hash": "sha1:e93bf1d63d5257d9a093562389c44f699bebea95",
+	"bin": "ConEmu.exe"
+}
