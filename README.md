@@ -1,0 +1,2 @@
+vidars-scoop-bucket
+===================
