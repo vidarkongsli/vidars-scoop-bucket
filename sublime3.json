@@ -11,8 +11,5 @@
 			"hash": "1CEE9059B512869901B0C406BC4F8E5D04E2171FEB93DC6D0D3B8F5E453588B9"
 		}
 	},
-	"bin": ["sublime_text.exe", "sublime"]
+	"bin": [ ["sublime_text.exe", "sublime"] ]
 }
-
-
-
