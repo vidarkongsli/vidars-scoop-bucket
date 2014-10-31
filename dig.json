@@ -11,5 +11,5 @@
 			"url": "ftp://ftp.isc.org/isc/bind9/9.9.6/BIND9.9.6.x86.zip"
 		}
 	},
-	"bin": "dig.exe",
+	"bin": "dig.exe"
 }
