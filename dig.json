@@ -2,14 +2,7 @@
     "homepage": "https://www.isc.org/",
 	"license": "https://www.isc.org/downloads/software-support-policy/isc-license/",
 	"version": "9.9.6",
-	"architecture": {
-		"64bit": {
-			"url": "ftp://ftp.isc.org/isc/bind9/9.9.6/BIND9.9.6.x64.zip",
-			"hash" : "58AF76C79AAF38F8C4D5E5969F773E422A059405F44C299DD6F4A63F22CC794C"
-		},
-		"32bit": {
-			"url": "ftp://ftp.isc.org/isc/bind9/9.9.6/BIND9.9.6.x86.zip"
-		}
-	},
+	"url" : "ftp://ftp.isc.org/isc/bind9/9.9.6/BIND9.9.6.x86.zip",
+	"hash" : "CC03FC37502650D2DCEC6DB3FAA0256672B67B5CCDAF4AA5F8ED08F2F5755452",
 	"bin": "dig.exe"
 }
