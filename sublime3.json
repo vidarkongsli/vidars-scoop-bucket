@@ -1,0 +1,18 @@
+{
+    "homepage": "http://www.sublimetext.com/3",
+	"version": "3059",
+	"architecture": {
+		"64bit": {
+			"url": "http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%20Build%203065%20x64.zip",
+			"hash": "C8E44CFB7F62DF51B8A4F4E5663A1412243AEB4C1825A8744A57D3CE26DC5ADD"
+		},
+		"32bit": {
+			"url": "http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%20Build%203065.zip",
+			"hash": "1CEE9059B512869901B0C406BC4F8E5D04E2171FEB93DC6D0D3B8F5E453588B9"
+		}
+	},
+	"bin": ["sublime_text.exe", "sublime"]
+}
+
+
+
