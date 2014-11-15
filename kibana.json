@@ -2,7 +2,8 @@
 	"homepage": "http://www.elasticsearch.org/overview/kibana/",
 	"version": "3.1.2",
 	"url": "https://download.elasticsearch.org/kibana/kibana/kibana-3.1.2.zip",
-	"hash": "6A4022EE8E127045CFA7AD0D236C0D519B0F218694FD8898FC56223A99982CF4"
+	"hash": "6A4022EE8E127045CFA7AD0D236C0D519B0F218694FD8898FC56223A99982CF4",
+	"extract_dir" : "kibana-3.1.2"
 }
 
 
