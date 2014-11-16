@@ -21,11 +21,10 @@ if ($command -eq 'install') {
     $logsDirectory = "$PSScriptRoot\logs"
     if (-not(test-path -Path $logsDirectory -PathType Container)) { mkdir $logsDirectory | out-null }
     sudo nssm install $serviceName nginx -c nginx.conf
-    sudo nssm set $serviceName AppDirectory $PSScriptRoot
+    Write-host "Setting application directory to $PSScriptRoot"
+    sudo nssm set $serviceName AppDirectory $PSScriptRoot | out-null
     sudo nssm set $serviceName AppStdout "$logsDirectory\stdout.log" 
     sudo nssm set $serviceName AppStderr "$logsDirectory\stderr.log"
-    #sudo nssm set $serviceName Application nginx
-    #sudo nssm set $serviceName AppParameters -c nginx.conf 
     Write-host "Created service $serviceName. To start service, type: .\$(split-path $MyInvocation.MyCommand.Path -Leaf) start"
 	Exit 0
 }
