@@ -18,6 +18,16 @@ if ($command -eq 'install') {
     if ($?) {
         Write-Error 'Kibana service already exists. So quitting.'
     }
+
+    $nginxInstallDir = split-path (scoop which nginx)
+    if (-not(test-path -Path $nginxInstallDir -PathType Container)) {
+        Write-Error "Nginx installation not found. Please install with 'sudo scoop install nginx --global'"
+    }
+
+    if (-not(test-path -Path "$PSScriptRoot\mime.types" -PathType Leaf)) {
+        copy-item "$nginxInstallDir\conf\mime.types" $PSScriptRoot | out-null
+    }
+
     $logsDirectory = "$PSScriptRoot\logs"
     if (-not(test-path -Path $logsDirectory -PathType Container)) { mkdir $logsDirectory | out-null }
     sudo nssm install $serviceName nginx -c nginx.conf
