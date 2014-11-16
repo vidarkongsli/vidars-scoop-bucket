@@ -35,7 +35,7 @@ if ($command -eq 'install') {
     sudo nssm set $serviceName AppDirectory $PSScriptRoot | out-null
     sudo nssm set $serviceName AppStdout "$logsDirectory\stdout.log" 
     sudo nssm set $serviceName AppStderr "$logsDirectory\stderr.log"
-    Write-host "Created service $serviceName. To start service, type: .\$(split-path $MyInvocation.MyCommand.Path -Leaf) start"
+    Write-host "Created service $serviceName. To start service, type: $(split-path $MyInvocation.MyCommand.Path -Leaf) start"
 	Exit 0
 }
 
