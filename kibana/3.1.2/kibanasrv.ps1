@@ -30,6 +30,9 @@ if ($command -eq 'install') {
 
     $logsDirectory = "$PSScriptRoot\logs"
     if (-not(test-path -Path $logsDirectory -PathType Container)) { mkdir $logsDirectory | out-null }
+    $tempDirectory = "$PSScriptRoot\temp"
+    if (-not(test-path -Path $tempDirectory -PathType Container)) { mkdir $tempDirectory | out-null }
+        
     sudo nssm install $serviceName nginx -c nginx.conf
     Write-host "Setting application directory to $PSScriptRoot"
     sudo nssm set $serviceName AppDirectory $PSScriptRoot 2>&1 | out-null
