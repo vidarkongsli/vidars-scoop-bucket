@@ -1,0 +1,14 @@
+{
+	"homepage": "https://code.google.com/p/conemu-maximus5",
+	"version": "141201",
+	"url": [
+		"https://download-installer.cdn.mozilla.net/pub/firefox/releases/34.0.5/win32/en-US/Firefox%20Setup%20Stub%2034.0.5.exe",
+		"https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/master/firefox/installer.ps1",
+		"https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/master/firefox/template.ini"
+		],
+	"hash": [
+		"41508434ba473c5f329609e7a575ddce851b4c4a823bde88cb80e7f3d217a9d0"
+		],
+	"bin": "firefox.exe",
+	"installer": { "file" : "installer.ps1" }
+}
