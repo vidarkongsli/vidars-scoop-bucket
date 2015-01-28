@@ -38,7 +38,7 @@ if ($cmd -eq 'build') {
 		Write-error "$sln not found in the current directory."
 	}
 	nuget restore .\$sln
-	msbuild /target:build /p:Configuration=Debug
+	msbuild /target:build /p:Configuration=Debug /p:VisualStudioVersion=12.0
 }
 
 if ($cmd -eq 'init-frontend') {
