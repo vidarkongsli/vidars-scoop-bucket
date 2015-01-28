@@ -37,6 +37,7 @@ if ($cmd -eq 'build') {
 	if (-not(test-path .\$sln)) {
 		Write-error "$sln not found in the current directory."
 	}
+	nuget restore .\$sln
 	msbuild /target:build /p:Configuration=Debug
 }
 
