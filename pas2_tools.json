@@ -2,6 +2,6 @@
 	"homepage": "https://github.com/Utdanningsdirektoratet/PAS2-hoved",
 	"version": "0.2014.01.28",
 	"url": "https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/master/pas2/2015-01-28/pas2_tools.ps1",
-	"hash": "sha256:1DCBCA03F5A0F92605308AEE1A207CD155FACAEA4FF69264B5310C1A40F785B0",
+	"hash": "sha256:1a0d47c3d42f416b8b1a91023e1bfc4e3b88477f7c49d46ef82ff5bbd9ae82e8",
 	"bin": [["pas2_tools.ps1", "pas2", ""]]
 }
