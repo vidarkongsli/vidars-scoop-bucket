@@ -10,5 +10,6 @@
 		"sha256:8087a2340a997c34d36e3b6fc183257e9795e4c4d75a33bc35c5e29889d4c903"
 	],
 	"installer": { "file": "installer.ps1" },
-	"bin" : "setenvforvs.ps1"
+	"bin" : "setenvforvs.ps1",
+	"post_install" : "& setenvforvs.ps1;write-host 'MsBuild is ready for business'"
 }
