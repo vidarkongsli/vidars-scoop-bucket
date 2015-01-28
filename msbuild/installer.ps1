@@ -4,14 +4,12 @@ if(!(test-path $profile)) {
     '' > $profile
 }
 
-$setEnvCommand = "$PSScriptRoot\setenvforvs.ps1"
-
 $text = gc $profile
 if(($text | sls 'setenvforvs') -eq $null) {
     write-host 'Adding Visual Studio environment init to your powershell profile'
 
     # read and write whole profile to avoid problems with line endings and encodings
-    $new_profile = @($text) + "try { & '$setEnvCommand'} catch { }"
+    $new_profile = @($text) + "try { & 'setenvforvs.ps1'} catch { }"
     $new_profile > $profile
 } else {
     write-host 'it looks like the Visual Studio init is already in your powershell profile, skipping'
