@@ -44,9 +44,9 @@ if ($cmd -eq 'build') {
 if ($cmd -eq 'init-frontend') {
 	if (test-path .\$sln) {
 		goto-andRun 'UDIR.PAS2.Web\ContentSrc' { $runNpmInstall;$buildFrontend }
-	} else if (test-path .\UDIR.PAS2.Web.csproj) {
+	} elseif (test-path .\UDIR.PAS2.Web.csproj) {
 		goto-andRun .\ContentSrc { $runNpmInstall;$buildFrontend }	
-	} else if (test-path .\gulpfile.js) {
+	} elseif (test-path .\gulpfile.js) {
 		& { $runNpmInstall;$buildFrontend }
 	} else {
 		Write-error "Source not found."
