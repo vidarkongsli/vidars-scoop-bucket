@@ -1,6 +1,12 @@
 #requires -v 3
 param($cmd)
 $ErrorPreference = 'stop'
+if (!($cmd)) {
+    Write-host "usage: pas2dev <command> [<args>]"
+    Write-host ""
+    Write-host "Hint: use command 'list' to list available commands"
+    Write-error "Specify command"
+}
 $scoop_home = $env:SCOOP, (join-path $env:localappdata scoop) | select -first 1
 
 $pas2bucket = join-path $scoop_home 'buckets\pas2'
