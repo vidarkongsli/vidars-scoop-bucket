@@ -1,14 +1,14 @@
 {
     "homepage": "http://octopusdeploy.com/",
-	"version": "2.6.0",
+	"version": "2.6.3.886",
 	"architecture": {
 		"64bit": {
-			"url": "http://download.octopusdeploy.com/octopus/Octopus.Tentacle.2.6.0.778-x64.msi",
-			"hash": "CB81F5296F7843C5C04CB20A02793BB14DAD50F6453A0F264EBE859E268D8289"
+			"url": "https://download.octopusdeploy.com/octopus/Octopus.Tentacle.2.6.3.886-x64.msi",
+			"hash": "AEED57127E11BF0E9175893EDB2FBD41D2AD2A919B53CD434AE5134E132EC77A"
 		},
 		"32bit": {
-			"url": "http://download.octopusdeploy.com/octopus/Octopus.Tentacle.2.6.0.778.msi",
-			"hash": "725222257424115455B4B8E38584AA5112E3BE93BB30FEA9345544E4AB7A2555"
+			"url": "https://download.octopusdeploy.com/octopus/Octopus.Tentacle.2.6.3.886.msi",
+			"hash": "622109502681943D585E26B04BE9A1798036302682822F0BE2E26DFFDA8365A5"
 		}
 	},
 	"bin": "PFiles\\Octopus Deploy\\Tentacle\\tentacle.exe"
