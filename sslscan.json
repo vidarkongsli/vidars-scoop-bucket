@@ -1,0 +1,7 @@
+{
+	"homepage": "https://github.com/rbsec/sslscan",
+	"version": "1.10.0",
+	"url": "https://github.com/rbsec/sslscan/releases/download/1.10.0-rbsec/sslscan-win-1.10.0-rbsec.zip",
+	"hash": "69D540B206589683F4CE0FBE8A1A248E90F1D72392B05D471A67440A17FBD481",
+	"bin": "sslscan.exe"
+}
