@@ -12,7 +12,7 @@
 		}
 	},
 	"bin": [ ["sublime_text.exe", "sublime"] ],
-	"travel_dirs" : [ "Data" ]
+	"travel_dirs" : [ "Data\\Local","Data\\Packages","Data\\Installed packages" ]
 	
 }
 
