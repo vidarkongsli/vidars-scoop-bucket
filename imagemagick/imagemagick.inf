@@ -1,0 +1,6 @@
+[Setup]
+Lang=default
+Dir=$installpath$
+Group=
+NoIcons=0
+Tasks=desktop_icon,install_magick_dll
