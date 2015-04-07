@@ -1,0 +1,22 @@
+{
+	"homepage": "http://www.imagemagick.org/",
+	"version": "6.9.1",
+	"url": [
+		"http://www.imagemagick.org/download/binaries/ImageMagick-6.9.1-1-Q16-x64-dll.exe",
+		"https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/9a3f3ff377ff72e62651d7167e69e2720d9c5ec7/imagemagick/installer.ps1",
+		"https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/ddc531a8b748e80bd5655f856ebac87e757aefa6/imagemagick/imagemagick.inf"
+		],
+	"hash": [
+		"44E9C59ACDA0B930952D09B76CB07C0E63AB64305C224D4D62CA10AD55DF3CC4",
+		"5247c3b4cbd04db7f1c72c6123920d61c1e711f95aaea8af1712203e73404ea8",
+		"f039dc22b039b86d26445c297fa5c64336c9e1527000839e0ebc94f25f1a1fef"
+		],
+	"bin": [["convert.exe","imconvert",""],"compare.exe", "composite.exe", "conjure.exe", "dcraw.exe", "hp2xx.exe", "identify.exe", "mogrify.exe", "montage.exe", "stream.exe"],
+	"installer": {
+		"file" : "installer.ps1"
+		},
+	"uninstaller": {
+	    "file": "unins000.exe",
+	    		"args": "/silent"
+	  	}
+}
