@@ -1,3 +1,4 @@
+#Requires -RunAsAdministrator
 <#
     Install, starts, stops, and removes Windows Service for Kibana. 
 #>
@@ -24,11 +25,11 @@ if ($command -eq 'install') {
     $logsDirectory = "$PSScriptRoot\logs"
     if (-not(test-path -Path $logsDirectory -PathType Container)) { mkdir $logsDirectory | out-null }
         
-    sudo nssm install $serviceName $kibanaAppFile
+    nssm install $serviceName $kibanaAppFile
     Write-host "Setting application directory to $PSScriptRoot"
-    sudo nssm set $serviceName AppDirectory "$PSScriptRoot\bin" 2>&1 | out-null
-    sudo nssm set $serviceName AppStdout "$logsDirectory\stdout.log" 2>&1 | out-null
-    sudo nssm set $serviceName AppStderr "$logsDirectory\stderr.log" 2>&1 | out-null
+    nssm set $serviceName AppDirectory "$PSScriptRoot\bin" 2>&1 | out-null
+    nssm set $serviceName AppStdout "$logsDirectory\stdout.log" 2>&1 | out-null
+    nssm set $serviceName AppStderr "$logsDirectory\stderr.log" 2>&1 | out-null
     Write-host "Created service $serviceName. To start service, type: $(split-path $MyInvocation.MyCommand.Path -Leaf) start"
 	Exit 0
 }
@@ -39,15 +40,15 @@ if (!$?) {
 }
 
 if (@('start','stop') -contains $command) {
-    sudo nssm $command $serviceName
+    nssm $command $serviceName
     if ($command -eq 'start') {
-        Write-host "Started kibana service. Visit UI at http://localhost:8080"
+        Write-host "Started kibana service. Visit UI at http://localhost:5601"
     }
     Exit 0
 }
 
 if ($command -eq 'remove') {
-    sudo nssm remove $serviceName confirm
+    nssm remove $serviceName confirm
     Exit 0
 }
 
