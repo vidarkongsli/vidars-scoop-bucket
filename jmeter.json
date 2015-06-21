@@ -1,6 +1,7 @@
  {
     "homepage": "https://jmeter.apache.org/",
 	"version": "2.13.0",
+	"depends" : "openjdk",
 	"url":"http://apache.uib.no//jmeter/binaries/apache-jmeter-2.13.zip",
 	"hash":"702E71E58F5BC7C58348401B8E774BA881730EAFFA70EAE5B1826AB59FFEC5B4",
 	"extract_dir" : "apache-jmeter-2.13",
