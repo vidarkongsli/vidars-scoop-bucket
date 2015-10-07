@@ -13,7 +13,11 @@
 	"bin": [
 		"sbin\\rabbitmq-server.bat",
 		"sbin\\rabbitmq-service.bat",
-		"sbin\\rabbitmqctl.bat"
+		"sbin\\rabbitmqctl.bat",
+		"sbin\\rabbitmq-plugins.bat",
+		"sbin\\rabbitmq-env.bat",
+		"sbin\\rabbitmq-echopid.bat",
+		"sbin\\rabbitmq-defaults.bat"
 	],
 	"env_set": {
         "RABBITMQ_BASE":"c:\\Data\\RabbitMQ",
