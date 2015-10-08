@@ -6,8 +6,7 @@
 	"hash": "ab4e8aeacf9bea89c688d8f299cde940c5dfa2545e19dc6a445401c59b52e93b",
 	"pre_install":"
 		if (!$env:erlang_home) {
-			Write-error 'Environment variable ERLANG_HOME is not defined. Make sure Erlang is installed before installing RabbitMQ'
-			Exit 1
+			Write-Warning 'Environment variable ERLANG_HOME is not defined. Make sure Erlang is installed before trying to run RabbitMQ'
 		}",
 	"extract_dir":"rabbitmq_server-3.5.5",
 	"bin": [
