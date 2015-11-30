@@ -1,14 +1,11 @@
 {
 	"homepage": "https://www.rabbitmq.com/",
-	"version" : "3.5.5",
+	"version" : "3.5.6",
 	"license" : "https://github.com/rabbitmq/rabbitmq-server/blob/master/LICENSE-MPL-RabbitMQ",
-	"url": "https://rabbitmq.com/releases/rabbitmq-server/v3.5.5/rabbitmq-server-windows-3.5.5.zip",
-	"hash": "ab4e8aeacf9bea89c688d8f299cde940c5dfa2545e19dc6a445401c59b52e93b",
-	"pre_install":"
-		if (!$env:erlang_home) {
-			Write-Warning 'Environment variable ERLANG_HOME is not defined. Make sure Erlang is installed before trying to run RabbitMQ'
-		}",
-	"extract_dir":"rabbitmq_server-3.5.5",
+	"url": "https://www.rabbitmq.com/releases/rabbitmq-server/v3.5.6/rabbitmq-server-windows-3.5.6.zip",
+	"hash": "4da3c646f5760c5ea228b9481c8cf479f929b5d078474079bf35a7a264fc0512",
+	"depends" : "erlang",
+	"extract_dir":"rabbitmq_server-3.5.6",
 	"bin": [
 		"sbin\\rabbitmq-server.bat",
 		"sbin\\rabbitmq-service.bat",
