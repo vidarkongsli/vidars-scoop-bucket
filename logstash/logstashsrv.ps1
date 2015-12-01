@@ -22,6 +22,14 @@ if ($command -eq 'install') {
         Write-Error 'Logstash service already exists. So quitting.'
     }
 
+    if (-not($env:JAVA_HOME)) {
+        Write-error "JAVA_HOME not set"
+    }
+
+    if (-not(test-path $env:JAVA_HOME)) {
+        Write-Error "JAVA_HOME directory does not exist: $($env:JAVA_HOME)"
+    }
+
     if (-not($configFile)) {
         Write-error "-configFile needs to be specified for install command"
     }
@@ -41,6 +49,7 @@ if ($command -eq 'install') {
     nssm set $serviceName AppDirectory "$PSScriptRoot\bin" 2>&1 | out-null
     nssm set $serviceName AppStdout "$logsDirectory\stdout.log" 2>&1 | out-null
     nssm set $serviceName AppStderr "$logsDirectory\stderr.log" 2>&1 | out-null
+    nssm set $serviceName AppEnvironmentExtra JAVA_HOME=$env:JAVA_HOME
     Write-host "Created service $serviceName. To start service, type: $(split-path $MyInvocation.MyCommand.Path -Leaf) start"
 	Exit 0
 }
