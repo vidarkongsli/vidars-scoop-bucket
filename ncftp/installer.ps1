@@ -3,4 +3,3 @@ param(
     )
 $args = "/i `"$PSScriptRoot\Setup NcFTP $version.msi`" TARGETDIR=`"$PSScriptRoot`" /qn"
 Start-process -FilePath 'msiexec' -ArgumentList $args -Wait
-sudo mv $env:windir\ncftp* . -Force
