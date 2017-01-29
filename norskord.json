@@ -1,10 +1,10 @@
 {
     "version": "2016.04.18",
-    "url": ["https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/3eb26e96d83ad436c19e518a8d937e71ef0924b1/norskord/bokm.ps1",
-            "https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/3eb26e96d83ad436c19e518a8d937e71ef0924b1/norskord/nyn.ps1",
+    "url": ["https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/564abcaa9dff8c10a7454a778d8de0a4ac988764/norskord/bokm.ps1",
+            "https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/564abcaa9dff8c10a7454a778d8de0a4ac988764/norskord/nyn.ps1",
             "https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/3eb26e96d83ad436c19e518a8d937e71ef0924b1/norskord/riks.ps1"],
-    "hash": ["1b33316b27ad4ff3ba59b77b6d81b1b4dda445ee5f2debd806b6b96ad2f61ba6",
-    		 "1215ce1d528f36cdf1b0fccfdd860da2ea092cb5641949a2b57e9210becfe9b9",
+    "hash": ["E8B7336ED059060D8BB6F99CBAC0FA53DA2C7A960E553CF7FB855B264F9CC67B",
+    		 "5E06BF7E0E675B5B51AD8142A0AECB8D354A8E86C61342E516F6734AB64ED580",
     		 "3050feae3bad6c3ff3c290069f80ae9b0ffd27d1ef0c9ee44c95731a74ba705c"],
     "bin": ["bokm.ps1","nyn.ps1","riks.ps1"]
 }
