@@ -1,7 +1,0 @@
-{
-	"homepage": "https://code.google.com/p/conemu-maximus5",
-	"version": "150310",
-	"url": "http://heanet.dl.sourceforge.net/project/conemu/Preview/ConEmuPack.150310.7z",
-	"hash": "F0A35B2D0757CBC09A4C13A6D2E2DCF6BDE572BBCC37DD09F4D46B47AF8EAFFB",
-	"bin": [ [ "ConEmu64.exe", "conemu", "" ] ]
-}
