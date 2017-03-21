@@ -1,0 +1,10 @@
+{
+  "homepage": "http://",
+  "version": "2017.3.21",
+  "license": "MIT",
+  "url": ["https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/97df315f5914c59c420c5253dc130297cca30c1c/modules/tsql/tsql.psm1"],
+  "hash" : "cf6bc2b73221bbeb2fe518dc3678a2816d54e960c98baaea4c10278c911ddef6",
+  "psmodule": {
+    "name": "tsql"
+  }
+}
