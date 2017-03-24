@@ -17,4 +17,3 @@ function Test-IsAdmin {
 	<tabTrigger>isadmin</tabTrigger>
 	<scope>source.powershell</scope>
 </snippet>
-s
