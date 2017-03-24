@@ -1,13 +1,19 @@
 {
   "homepage": "http://",
-  "version": "0.0.1",
+  "version": "2017.03.24",
   "license": "MIT",
   "url": [
   	"https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/8db8d74373585a17bbb18c59d41d2bd2cee060b1/sublime-snippets/scoop-manifest.sublime-snippet",
   	"https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/8db8d74373585a17bbb18c59d41d2bd2cee060b1/sublime-snippets/mit-oss.sublime-snippet",
-  	"https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/8db8d74373585a17bbb18c59d41d2bd2cee060b1/sublime-snippets/sublime-snippets.psm1"
+  	"https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/8db8d74373585a17bbb18c59d41d2bd2cee060b1/sublime-snippets/sublime-snippets.psm1",
+    "https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/b415d369/sublime-snippets/test-isadmin.sublime-snippet"
   ],
-  "hash": ["069b90d02440ebafda85f1ef5cf004533570546c662d7e01be3b2df742bf8460", "558394da91c1b68033e042a02097097d8fd145df1d6b259bc36bf7d1af1655b3" ,"fb6b9b8483382709dbd6884a60f8cd5fd54f8fbd7a008132f71b32fb34595fd7" ],
+  "hash": [
+    "069b90d02440ebafda85f1ef5cf004533570546c662d7e01be3b2df742bf8460",
+    "558394da91c1b68033e042a02097097d8fd145df1d6b259bc36bf7d1af1655b3",
+    "fb6b9b8483382709dbd6884a60f8cd5fd54f8fbd7a008132f71b32fb34595fd7",
+    "1ddcb0aade1f94148cd6273b4e1574a8c12d95d18592e7420ca801220b4fcc28"
+  ],
   "psmodule" : {
   	"name": "sublime-snippets"
   }
