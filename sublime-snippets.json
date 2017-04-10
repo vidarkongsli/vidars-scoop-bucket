@@ -10,7 +10,8 @@
     "https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/d790cdec2/sublime-snippets/sublime-snippet.sublime-snippet",
     "https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/b7b10e149e8d57250a5a56b4b27f2c70ddca77de/sublime-snippets/posh-recipes/01-property-idempotent.sublime-snippet",
     "https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/b7b10e149e8d57250a5a56b4b27f2c70ddca77de/sublime-snippets/posh-recipes/02-property-error-clause.sublime-snippet",
-    "https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/b7b10e149e8d57250a5a56b4b27f2c70ddca77de/sublime-snippets/posh-recipes/03-property-erroractionpreference.sublime-snippet"   
+    "https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/b7b10e149e8d57250a5a56b4b27f2c70ddca77de/sublime-snippets/posh-recipes/03-property-erroractionpreference.sublime-snippet",
+    "https://raw.githubusercontent.com/vidarkongsli/vidars-scoop-bucket/bee3cd31eace3c59e0d08a7a0e83c9e5f7e95cc3/sublime-snippets/posh-recipes/04-fail-script.sublime-snippet"
   ],
   "hash": [
     "069b90d02440ebafda85f1ef5cf004533570546c662d7e01be3b2df742bf8460",
@@ -20,7 +21,8 @@
     "d4bf49bbeb3ac8e23f0347e69e54dfa26ff415adacc1f66feecd7b0f249b8535",
     "a65e99a9e246a8b2f340e3adfbd418bc924c037a87895fd48157b050cd591fc7",
     "81557221f9a16d84784bd7e4b8467a5d5c3033aa49caf49fe591f0e1dc01f2cf",
-    "2fc5f6bf3c0c695389fa2b9e9d0358addce51433c488026eed7ccbd8b73609fc"
+    "2fc5f6bf3c0c695389fa2b9e9d0358addce51433c488026eed7ccbd8b73609fc",
+    "988ca34189c988419d3e699463d7ba5a538ef5efa62e7e4199d43eb59ef6b99a"
   ],
   "psmodule" : {
   	"name": "sublime-snippets"
