@@ -1,10 +1,12 @@
 <snippet>
-	<content><![CDATA[param(
-	[switch]$$DoFail
+	<content><![CDATA[
+param(
+	[switch]\$DoFail
 	)
-if ($DoFail) {
+if (\$DoFail) {
 	Exit 1
-}]]></content>
+}
+]]></content>
 	<tabTrigger>posh-failscript</tabTrigger>
 	<scope>source.powershell</scope>
 </snippet>
