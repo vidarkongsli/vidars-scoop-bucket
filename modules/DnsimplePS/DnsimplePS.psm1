@@ -19,11 +19,14 @@ function CreateHeaders($Token) {
     @{'Authorization'="Bearer $(ToClearText $Token)"}
 }
 
-function Get-ZoneRecord {
+
 <#
-.SYNOPSIS Foo
-.DESCRIPTION Foo
+.SYNOPSIS Retrieves records for a certain zone
+
+.DESCRIPTION Retrieves records for a certain zone
+
 #> 
+function Get-ZoneRecord {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,Position=0)]
@@ -105,7 +108,7 @@ function Remove-ZoneRecord {
         [Parameter(Mandatory,ValueFromPipelineByPropertyName=$true)]
         $Account,
         [Parameter(Mandatory,ValueFromPipelineByPropertyName=$true)]
-        [System.Security.SecureString]$AccessToken = $null
+        [System.Security.SecureString]$AccessToken
         )
 
     if ($PsCmdLet.ShouldProcess($Id)) {
@@ -217,5 +220,5 @@ function Read-AccessToken {
     new-object PSObject -Property @{Account=$Account;AccessToken = (Decrypt $store[$Account])}
 }
 
-Export-ModuleMember -Function Add-ZoneRecord, Get-ZoneRecords, Get-ZoneRecord, `
-    Remove-ZoneRecord, Set-AccessToken, Get-AccessToken, Write-AccessToken, Read-AccessToken
+Export-ModuleMember -Function Add-ZoneRecord, Get-ZoneRecord, `
+    Remove-ZoneRecord, Get-AccessToken, Write-AccessToken, Read-AccessToken
