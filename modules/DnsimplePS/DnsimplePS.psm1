@@ -1,5 +1,4 @@
 
-
 function BaseUri($Account) {
     "https://api.dnsimple.com/v2/$Account/"
 }
@@ -12,43 +11,57 @@ function RecordUri($Account, $Zone, $id) {
     "$(RecordsUri $Account $Zone)/$Id"
 }
 
-function Set-AccessToken($Token) {
-    $script:_oauth2_access_token = $Token
+function ToClearText([System.Security.SecureString] $Token) {
+    (new-object PSCredential 'doesntmatter',$Token).GetNetworkCredential().Password
 }
 
-function Create-Headers($Token) {
-    $t = if ($Token) { $Token } else { $_oauth2_access_token }
-    if (-not $t) {
-        Write-Error "No access token."
-        return
-    }
-    @{'Authorization'="Bearer $t"}
+function CreateHeaders($Token) {
+    @{'Authorization'="Bearer $(ToClearText $Token)"}
 }
 
-function Get-ZoneRecords{
+function Get-ZoneRecord {
+<#
+.SYNOPSIS Foo
+.DESCRIPTION Foo
+#> 
     [CmdletBinding()]
     param(
-        $Account,
+        [Parameter(Mandatory,Position=0)]
         $Zone,
-        $AccessToken = $null,
+        [Parameter(Mandatory,ValueFromPipelineByPropertyName=$true)]
+        $Account,
+        [Parameter(Mandatory,ValueFromPipelineByPropertyName=$true)]
+        [System.Security.SecureString]$AccessToken,
+        [Parameter(Mandatory=$false,ParameterSetName='ListRecords')]
         $RecordType = $null,
+        [Parameter(Mandatory=$false,ParameterSetName='ListRecords')]
         $Name = $null,
-        $NameLike = $null
+        [Parameter(Mandatory=$false,ParameterSetName='ListRecords')]
+        $NameLike = $null,
+        [Parameter(Mandatory,ParameterSetName='ListRecords')]
+        [switch]$Search,
+        [Parameter(Mandatory,ParameterSetName='ById')]
+        $Id
         )
     $old__errPref = $ErrorActionPreference
     try {
         $ErrorActionPreference = 'stop'
-        $Uri = "$(BaseUri $Account)zones/$Zone/records"
-        $query = @{}
-        if ($RecordType) { $query.Add('type',$RecordType) }
-        if ($Name) { $query.Add('name', $Name) }
-        if ($NameLike) { $query.Add('name_like', $NameLike) }
-        if ($query.Count > 0) {
-            $qRaw = $query | % { "$_.Name=$_.Value" } 
+        if (-not($Search)) {
+            Invoke-RestMethod -Method GET -Uri (RecordUri $Account $Zone $Id) -Headers (CreateHeaders $AccessToken) `
+                | Select-Object -ExpandProperty data
+        } else {
+            $Uri = "$(BaseUri $Account)zones/$Zone/records"
+            $query = @{}
+            if ($RecordType) { $query.Add('type',$RecordType) }
+            if ($Name) { $query.Add('name', $Name) }
+            if ($NameLike) { $query.Add('name_like', $NameLike) }
+            if ($query.Count > 0) {
+                $qRaw = $query | ForEach-Object { "$_.Name=$_.Value" } 
+            }
+            Write-Debug "Requesting: GET $Uri"
+            Invoke-RestMethod -Method Get -Uri $Uri -Headers (Create-Headers $AccessToken) -UseBasicParsing `
+                | Select-Object -ExpandProperty data
         }
-        Write-Debug "Requesting: GET $Uri"
-        Invoke-RestMethod -Method Get -Uri $Uri -Headers (Create-Headers $AccessToken) -UseBasicParsing `
-            | Select-Object -ExpandProperty data
     } finally {
         $ErrorActionPreference = $old__errPref
     }
@@ -56,11 +69,18 @@ function Get-ZoneRecords{
 
 function Add-ZoneRecord {
     param(
-        $Account,
+        [Parameter(Mandatory,Position=0)]
         $Zone,
-        $AccessToken,
-        $RecordType = $null,
+        [Parameter(Mandatory,ValueFromPipelineByPropertyName=$true)]
+        $Account,
+        [Parameter(Mandatory,ValueFromPipelineByPropertyName=$true)]
+        [System.Security.SecureString]$AccessToken = $null,
+        [Parameter(Mandatory)]
+        [ValidateSet('A','ALIAS','CNAME','MX','SPF','URL','TXT','NS','SRV','NAPTR','PTR','AAAA','SSHFP','HINFO','POOL','CAA')]
+        $RecordType,
+        [Parameter(Mandatory)]
         $Name,
+        [Parameter(Mandatory)]
         $Content
         )
 
@@ -70,46 +90,30 @@ function Add-ZoneRecord {
         'type' = $RecordType
     }
 
-    Invoke-RestMethod -Method POST -Uri (RecordsUri $Account $Zone) -Headers (Create-Headers $AccessToken) `
+    Invoke-RestMethod -Method POST -Uri (RecordsUri $Account $Zone) -Headers (CreateHeaders $AccessToken) `
         -Body (ConvertTo-Json -InputObject $data) -ContentType 'application/json' `
         | Select-Object -ExpandProperty data
 }
 
-function Get-ZoneRecord {
-    param(
-        $Account,
-        $Zone,
-        $AccessToken,
-        $Id
-        )
-
-    Invoke-RestMethod -Method GET -Uri (RecordUri $Account $Zone $Id) -Headers (Create-Headers $AccessToken) `
-        | Select-Object -ExpandProperty data
-}
-
 function Remove-ZoneRecord {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param(
-        $Account,
+        [Parameter(Mandatory,Position=0)]
         $Zone,
-        $AccessToken,
+        [Parameter(Mandatory,Position=1)]
         $Id,
-        [switch]$Force
+        [Parameter(Mandatory,ValueFromPipelineByPropertyName=$true)]
+        $Account,
+        [Parameter(Mandatory,ValueFromPipelineByPropertyName=$true)]
+        [System.Security.SecureString]$AccessToken = $null
         )
 
-    if (-not($Force)) {
-        $choice = ""
-        while ($choice -notmatch "[y|n]"){
-            $choice = read-host "Deleting record. Are you sure? (Y/N)"
-        }
-        if ($choice -eq 'n') {
-            Write-Host "Cancelled by user"
-            Return
-        }
+    if ($PsCmdLet.ShouldProcess($Id)) {
+        $Uri = RecordUri $Account $Zone $Id
+        Write-Debug "Requesting: DELETE $Uri"
+        Invoke-WebRequest -Method DELETE -Uri $Uri -Headers (CreateHeaders $AccessToken) `
+            | select-object StatusCode,StatusDescription
     }
-    $Uri = RecordUri $Account $Zone $Id
-    Write-Debug "Requesting: DELETE $Uri"
-    Invoke-RestMethod -Method DELETE -Uri $Uri -Headers (Create-Headers $AccessToken) `
-        | Select-Object -ExpandProperty data
 }
 
 function Get-AccessToken {
@@ -137,13 +141,13 @@ function Get-AccessToken {
         Start-Sleep -Milliseconds 200
     }
     $query = ($ie.LocationUrl -split '\?')[-1] -split '\&'
-    $codeParameter = $query | ? { $_ -match '^code=' }
+    $codeParameter = $query | Where-Object { $_ -match '^code=' }
     $ie.Quit()
     if ($codeParameter) {
         $code = $codeParameter.Replace('code=','')
     } else {
-        $error = $query | ? { $_ -match '^error=' }
-        $errorDescription = $query | ? { $_ -match '^error_description=' }
+        $error = $query | Where-Object { $_ -match '^error=' }
+        $errorDescription = $query | Where-Object { $_ -match '^error_description=' }
         Write-error "No code found. Error: $error, $errorDescription"
     }
     invoke-restmethod -Method POST -Uri 'https://api.dnsimple.com/v2/oauth/access_token' `
@@ -158,4 +162,60 @@ function Get-AccessToken {
         | Select-Object -ExpandProperty access_token
 }
 
-Export-ModuleMember -Function Add-ZoneRecord,Get-ZoneRecords,Get-ZoneRecord,Remove-ZoneRecord,Set-AccessToken,Get-AccessToken
+function Encrypt($Token) {
+    $t = $Token
+    if ($t -isnot [System.Security.SecureString]) {
+        Write-debug 'Input is cleartext - creating SecureString'
+        $t = ConvertTo-SecureString -AsPlainText $t -Force
+    } else {
+        Write-debug 'Input is already SecureString'
+    }
+    ConvertFrom-SecureString $t
+}
+
+function Decrypt($TokenEncrypted) {
+    ConvertTo-SecureString $TokenEncrypted
+}
+
+function Write-AccessToken {
+    param(
+        [Parameter(Mandatory,Position=0)]
+        $AccessToken,
+        [Parameter(Mandatory,Position=1)]
+        $Account,
+        [Parameter(Mandatory=$false)]
+        $Path = "$(join-path (split-path $PROFILE) '.dnsimple.tokens')"
+        )
+
+    $store = @{}
+    if (test-path $Path) {
+        Write-debug "Reading access tokens from $Path"
+        $store = Import-CliXml -Path $Path
+        WRite-debug "$($store.Count) tokens read"
+    } else {
+        Write-debug "Access tokens store at $Path does not exist"
+    }
+    $store[$Account] = Encrypt $AccessToken
+    Write-debug "Writing access tokens (count: $($store.Count)) to store at $Path"
+    Export-CliXml -Path $Path -InputObject $store
+}
+
+function Read-AccessToken {
+    param(
+        [Parameter(Mandatory,Position=0)]
+        $Account,
+        [Parameter(Mandatory=$false)]
+        $Path = "$(join-path (split-path $PROFILE) '.dnsimple.tokens')"
+        )
+    if (-not(test-path $Path)) {
+        Write-error "Access token store at $Path not found"
+        return
+    }
+    Write-debug "Reading access tokens from $Path"
+    $store = Import-CliXml -Path $Path
+    Write-debug "$($store.Count) tokens read"
+    new-object PSObject -Property @{Account=$Account;AccessToken = (Decrypt $store[$Account])}
+}
+
+Export-ModuleMember -Function Add-ZoneRecord, Get-ZoneRecords, Get-ZoneRecord, `
+    Remove-ZoneRecord, Set-AccessToken, Get-AccessToken, Write-AccessToken, Read-AccessToken
