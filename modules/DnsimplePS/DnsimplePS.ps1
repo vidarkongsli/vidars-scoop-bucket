@@ -35,6 +35,7 @@ function Get-ZoneRecord {
         [Parameter(Mandatory,ValueFromPipelineByPropertyName=$true)]
         [System.Security.SecureString]$AccessToken,
         [Parameter(Mandatory=$false,ParameterSetName='ListRecords')]
+        [ValidateSet('A','ALIAS','CNAME','MX','SPF','URL','TXT','NS','SRV','NAPTR','PTR','AAAA','SSHFP','HINFO','POOL','CAA')]
         $RecordType,
         [Parameter(Mandatory=$false,ParameterSetName='ListRecords')]
         $Name,
@@ -88,14 +89,17 @@ function Add-ZoneRecord {
         $Content
         )
 
-    $data = New-Object -Type PSObject -Property @{
+    $data = [pscustomobject]@{
         'name' = $Name
         'content' = $Content
         'type' = $RecordType
-    }
+    } | ConvertTo-Json
 
-    Invoke-RestMethod -Method POST -Uri (RecordsUri $Account $Zone) -Headers (CreateHeaders $AccessToken) `
-        -Body (ConvertTo-Json -InputObject $data) -ContentType 'application/json' `
+    $uri = RecordsUri $Account $Zone
+    Write-Debug "Calling Uri $uri with payload $data"
+
+    Invoke-RestMethod -Method POST -Uri $uri -Headers (CreateHeaders $AccessToken) `
+        -Body $data -ContentType 'application/json' `
         | Select-Object -ExpandProperty data
 }
 
@@ -206,7 +210,7 @@ function Write-AccessToken {
 
 function Read-AccessToken {
     param(
-        [Parameter(Mandatory,Position=0)]
+        [Parameter(Mandatory=$false,Position=0)]
         $Account,
         [Parameter(Mandatory=$false, Position=1)]
         $Path = "$(join-path (split-path $PROFILE) '.dnsimple.tokens')"
@@ -218,19 +222,9 @@ function Read-AccessToken {
     Write-debug "Reading access tokens from $Path"
     $store = Import-CliXml -Path $Path
     Write-debug "$($store.Count) tokens read"
-    new-object PSObject -Property @{Account=$Account;AccessToken = (Decrypt $store[$Account])}
-}
-
-function List-AccessToken {
-    param(
-        [Parameter(Mandatory=$false, Position=1)]
-        $Path = "$(join-path (split-path $PROFILE) '.dnsimple.tokens')"
-        )
-    if (-not(test-path $Path)) {
-        Write-error "Access token store at $Path not found"
-        return
+    if ($Account) {
+        new-object PSObject -Property @{Account=$Account;AccessToken = (Decrypt $store[$Account])}
+    } else {
+        $store.Keys | foreach-object { new-object PSObject -Property @{Account=$_} }
     }
-    Write-debug "Reading access tokens from $Path"
-    $store = Import-CliXml -Path $Path
-    $store.Keys | foreach-object { new-object PSObject -Property @{Account=$_} }
 }

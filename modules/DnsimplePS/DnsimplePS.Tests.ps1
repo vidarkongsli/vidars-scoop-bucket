@@ -102,6 +102,64 @@ Describe 'DnSimplePS module' {
 
             Assert-MockCalled Invoke-RestMethod -Times 1 -Scope It
         }
+
+        Mock Invoke-RestMethod {
+            $bodyPS = ConvertFrom-Json $Body
+            return [PSCustomObject]@{
+                data = [PSCustomObject]@{
+                    id=11278049
+                    zone_id=$Zone
+                    parent_id=$null
+                    name=$bodyPS.name
+                    content=$bodyPS.Content
+                    ttl=3600
+                    priority=$null
+                    type=$bodyPS.type
+                    regions=@('global')
+                    system_record=$false
+                    created_at='2017-03-24T11:53:27Z'
+                    updated_at='2017-03-24T11:53:27Z'
+                }
+            }
+        } -ParameterFilter { $Method -eq 'POST' -and $Uri -eq 'https://api.dnsimple.com/v2/1/zones/somesite.com/records' }
+
+        It 'should be able to add zone record' {
+            $acc = [pscustomobject]@{
+                Account = 1
+                AccessToken = (ConvertTo-SecureString -AsPlainText 'foo' -Force) 
+            }
+            $zone = 'somesite.com'
+            $content = 'http://somewhere.else.com'
+            $recordName = 'test1'
+            $result = $acc | Add-ZoneRecord -Zone $zone -Name $recordName -RecordType URL `
+                -Content $content
+
+            $result.zone_id | Should be $zone
+            $result.content | Should be $content
+            $result.name | Should be $recordName
+
+            Assert-MockCalled Invoke-RestMethod -Times 1 -Scope It
+        } 
+
+        Mock Invoke-WebRequest {
+            return [pscustomobject]@{
+                StatusCode=204
+                StatusDescription='No Content'
+                Content=''
+                RawContentLength=0
+            }
+        } -ParameterFilter { $Method -eq 'DELETE' -and $Uri -eq 'https://api.dnsimple.com/v2/1/zones/somesite.com/records/1' } 
+
+        It 'should be able to delete record' {
+            $acc = [pscustomobject]@{
+                Account = 1
+                AccessToken = (ConvertTo-SecureString -AsPlainText 'foo' -Force) 
+            }
+            $zone = 'somesite.com'
+            $result = $acc | Remove-ZoneRecord -Zone $zone -Id 1
+            $result.StatusCode | Should Be 204
+
+            Assert-MockCalled Invoke-WebRequest -Times 1 -Scope It
+         }
     }
 }
-
