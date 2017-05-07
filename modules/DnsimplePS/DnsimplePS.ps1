@@ -19,7 +19,6 @@ function CreateHeaders($Token) {
     @{'Authorization'="Bearer $(ToClearText $Token)"}
 }
 
-
 <#
 .SYNOPSIS Retrieves records for a certain zone
 
@@ -36,11 +35,11 @@ function Get-ZoneRecord {
         [Parameter(Mandatory,ValueFromPipelineByPropertyName=$true)]
         [System.Security.SecureString]$AccessToken,
         [Parameter(Mandatory=$false,ParameterSetName='ListRecords')]
-        $RecordType = $null,
+        $RecordType,
         [Parameter(Mandatory=$false,ParameterSetName='ListRecords')]
-        $Name = $null,
+        $Name,
         [Parameter(Mandatory=$false,ParameterSetName='ListRecords')]
-        $NameLike = $null,
+        $NameLike,
         [Parameter(Mandatory,ParameterSetName='ListRecords')]
         [switch]$Search,
         [Parameter(Mandatory,ParameterSetName='ById')]
@@ -58,11 +57,13 @@ function Get-ZoneRecord {
             if ($RecordType) { $query.Add('type',$RecordType) }
             if ($Name) { $query.Add('name', $Name) }
             if ($NameLike) { $query.Add('name_like', $NameLike) }
-            if ($query.Count > 0) {
-                $qRaw = $query | ForEach-Object { "$_.Name=$_.Value" } 
+            if ($query.Count -gt 0) {
+                $qRaw = ($query.Keys | ForEach-Object { "$_=$([Uri]::EscapeDataString($query[$_]))" }) `
+                    -join '&'
+                $Uri += "?$qRaw"
             }
             Write-Debug "Requesting: GET $Uri"
-            Invoke-RestMethod -Method Get -Uri $Uri -Headers (Create-Headers $AccessToken) -UseBasicParsing `
+            Invoke-RestMethod -Method Get -Uri $Uri -Headers (CreateHeaders $AccessToken) -UseBasicParsing `
                 | Select-Object -ExpandProperty data
         }
     } finally {
@@ -207,7 +208,7 @@ function Read-AccessToken {
     param(
         [Parameter(Mandatory,Position=0)]
         $Account,
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory=$false, Position=1)]
         $Path = "$(join-path (split-path $PROFILE) '.dnsimple.tokens')"
         )
     if (-not(test-path $Path)) {
@@ -218,4 +219,18 @@ function Read-AccessToken {
     $store = Import-CliXml -Path $Path
     Write-debug "$($store.Count) tokens read"
     new-object PSObject -Property @{Account=$Account;AccessToken = (Decrypt $store[$Account])}
+}
+
+function List-AccessToken {
+    param(
+        [Parameter(Mandatory=$false, Position=1)]
+        $Path = "$(join-path (split-path $PROFILE) '.dnsimple.tokens')"
+        )
+    if (-not(test-path $Path)) {
+        Write-error "Access token store at $Path not found"
+        return
+    }
+    Write-debug "Reading access tokens from $Path"
+    $store = Import-CliXml -Path $Path
+    $store.Keys | foreach-object { new-object PSObject -Property @{Account=$_} }
 }
