@@ -22,9 +22,14 @@ function Import-Snippets {
     $ErrorActionPreference = 'stop'
     $userPath = resolve-path (join-path (_locateSublime) '\Data\Packages\User') | select -ExpandProperty Path
     Write-Debug "Sublime user directory found at $userPath"
-    $inventory = resolve-path (join-path $userPath $_snippetsFile)
+
+    $inventory = join-path $userPath $_snippetsFile
+    if (-not(test-path $inventory)) {
+        '' | out-file -FilePath $inventory
+    }
+    $inventory = resolve-path $inventory
     Write-Debug "Inventory file is $inventory"
-    $snippets = dir -Path $psscriptroot -Filter *.sublime-snippet | select -ExpandProperty Name
+    $snippets = dir -Path $psscriptroot -Filter *.sublime-snippet -Recurse | select -ExpandProperty Name
     $existingSnippets = if (test-path $inventory) {
         get-content $inventory        
     } else {
