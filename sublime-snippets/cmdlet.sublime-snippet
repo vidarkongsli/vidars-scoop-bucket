@@ -30,6 +30,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   		} 
   	}
 ]]></content>
-	<tabTrigger>cmdlet</tabTrigger>
-	<scope>source.csharp</scope>
+	<tabTrigger>cmdlet-scaffold</tabTrigger>
+	<scope>source.cs</scope>
 </snippet>

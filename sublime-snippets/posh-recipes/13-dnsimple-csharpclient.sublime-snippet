@@ -64,5 +64,5 @@ namespace DnsimpleV2
 }
 ]]></content>
 	<tabTrigger>dnsimple-csharpclient</tabTrigger>
-	<scope>source.csharp</scope>
+	<scope>source.cs</scope>
 </snippet>
