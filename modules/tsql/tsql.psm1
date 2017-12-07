@@ -1,20 +1,87 @@
-function ConnectSQL {
-    Param ($server, $query, $database)
-    Write-debug "Server: $server, Database: $database, Query: $query"
+
+
+
+function New-ConnectionString {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        $server,
+        [Parameter(Mandatory)]
+        $database,
+        [Parameter(Mandatory=$false)]
+        $user,
+        [Parameter(Mandatory=$false)]
+        $pwd,
+        [Parameter(Mandatory=$false)]
+        [int]$port = 1433
+    )
+    if ($user) {
+        "Server=tcp:$($server),$($port);Initial Catalog=$($database);Persist Security Info=False;User ID=$($user);Password=$($pwd);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+    } else {
+        "Server=$server;Integrated Security=SSPI;Database=$database"
+    }
+}
+
+function New-DbConnection {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory,ValueFromPipeline)]
+        $connectionString,
+        [Parameter(Mandatory=$false)]
+        [switch]$dontOpenConnection
+    )
     $conn = new-object ('System.Data.SqlClient.SqlConnection')
-    $connString = "Server=$server;Integrated Security=SSPI;Database=$database"
-    $conn.ConnectionString = $connString
-    $conn.Open()
+    $conn.ConnectionString = $connectionString
+    if (-not($dontOpenConnection)) {
+        $conn.Open()
+    }
+    $conn
+}
+
+function Close-DbConnection {
+    [CmdletBinding()]
+    Param (
+        [Parameter(Mandatory,ValueFromPipeline)]
+        [System.Data.SqlClient.SqlConnection]$connection
+    )
+    if ($connection -eq 'Open') {
+        $connection.Close()
+    }    
+}
+
+function Write-SqlNonQuery {
+    [CmdletBinding()]
+    Param (
+        [Parameter(Mandatory,ValueFromPipeline)]
+        [System.Data.SqlClient.SqlConnection]$connection,
+        [Parameter(Mandatory)]
+        $stmt
+    )
     $sqlCmd = New-Object System.Data.SqlClient.SqlCommand
-    $sqlCmd.CommandText = $query
-    $sqlCmd.Connection = $conn
-    $Rset = $sqlCmd.ExecuteReader()
-    ,$Rset ## The comma is used to create an outer array, which PS strips off automatically when returning the $Rset
+    $sqlCmd.CommandText = $stmt
+    $sqlCmd.Connection = $connection
+    if ($connection.State -ne 'Open') {
+        $connection.Open()
+    }
+    $sqlCmd.ExecuteNonQuery()
 }
 
 function Read-SqlQuery {
-    Param ($server, $query, $database = "master")
-    $data = ConnectSQL $server $query $database
+    [CmdletBinding()]
+    Param (
+        [Parameter(Mandatory,ValueFromPipeline)]
+        [System.Data.SqlClient.SqlConnection]$connection,
+        [Parameter(Mandatory)]
+        $query 
+    )
+
+    $sqlCmd = New-Object System.Data.SqlClient.SqlCommand
+    $sqlCmd.CommandText = $query
+    $sqlCmd.Connection = $connection
+    if ($connection.State -ne 'Open') {
+        $connection.Open()
+    }
+    $data = $sqlCmd.ExecuteReader()
     while ($data.read() -eq $true) {
         $max = $data.FieldCount -1
         $obj = New-Object Object
@@ -28,18 +95,7 @@ function Read-SqlQuery {
         }
         $obj
     }
-}
-
-function Write-SqlNonQuery {
-    Param ($server, $stmt, $database = "master")
-    $conn = new-object ('System.Data.SqlClient.SqlConnection')
-    $connString = "Server=$server;Integrated Security=SSPI;Database=$database"
-    $conn.ConnectionString = $connString
-    $conn.Open()
-    $sqlCmd = New-Object System.Data.SqlClient.SqlCommand
-    $sqlCmd.CommandText = $stmt
-    $sqlCmd.Connection = $conn
-    $sqlCmd.ExecuteNonQuery()
+    $data.Close()
 }
 
 function Add-sqldb {
@@ -95,4 +151,4 @@ function Add-sqluser($server, $dbname, $user='IIS APPPOOL\DefaultAppPool') {
     }
 }
 
-Export-modulemember -function Add-sqluser,Add-sqllogin,Add-sqldb,Read-SqlQuery,Write-SqlNonQuery
+Export-modulemember -function Add-sqluser,Add-sqllogin,Add-sqldb,Read-SqlQuery,Write-SqlNonQuery,New-ConnectionString,New-DbConnection,Close-DbConnection
