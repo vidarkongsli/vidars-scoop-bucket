@@ -9,17 +9,24 @@ function New-ConnectionString {
         [Parameter(Mandatory)]
         $database,
         [Parameter(Mandatory=$false)]
-        $user,
+        $user='',
         [Parameter(Mandatory=$false)]
         $pwd,
         [Parameter(Mandatory=$false)]
         [int]$port = 1433
     )
-    if ($user) {
-        "Server=tcp:$($server),$($port);Initial Catalog=$($database);Persist Security Info=False;User ID=$($user);Password=$($pwd);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+    if ([Uri]::CheckHostName($server) -eq 'Dns') {
+        $str = "Server=tcp:$($server),$($port);Initial Catalog=$($database);Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
     } else {
-        "Server=$server;Integrated Security=SSPI;Database=$database"
+        $str = "Server=$Server;Database=$($database)"
     }
+
+    if ($user -and ($user -ne '')) {
+        $str = "$str;User ID=$($user);Password=$($pwd);MultipleActiveResultSets=False;"
+    } else {
+        $str = "$str;Integrated Security=SSPI;"
+    }
+    $str
 }
 
 function New-DbConnection {
