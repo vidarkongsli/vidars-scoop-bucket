@@ -21,17 +21,61 @@ function set-sync($syncRoot, $codeUserDirectory) {
     mklink $codeUserDirectory $syncRoot
 }
 
-function set-vscodesync{
+$codeUserDirectory = "$($env:APPDATA)\Code\User"
+
+function backup-vscodesettings {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
         [ValidateScript({test-path $_ -pathtype Container})]
         $oneDrivePath
     )
-
+    
     $syncRoot = "$oneDrivePath\dev-sync\code\User"
-    $codeUserDirectory = "$($env:APPDATA)\Code\User"
-    set-sync $syncRoot $codeUserDirectory
+    
+
+    if (-not(test-path $syncRoot -PathType Container))
+    {
+        Write-Error "Path $syncRoot does not exist."     
+    }
+
+    $settingsPath = "$codeUserDirectory\settings.json"
+    if (test-path $settingsPath) {
+        Write-host "Backing up settings.json"
+        Copy-Item $settingsPath $syncRoot
+    }
+    $snippetDirectory = "$codeUserDirectory\snippets"
+    if (test-path $snippetDirectory) {
+        Write-host "Backing up snippets"
+        Robocopy.exe $snippetDirectory "$syncRoot\snippets" /mir
+    }
+}
+
+function restore-vscodesettings {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateScript({test-path $_ -pathtype Container})]
+        $oneDrivePath
+    )
+    
+    $syncRoot = "$oneDrivePath\dev-sync\code\User"
+
+    if (-not(test-path $syncRoot -PathType Container))
+    {
+        Write-Error "Path $syncRoot does not exist."     
+    }
+
+    $settingsPath = "$syncRoot\settings.json"
+    if (test-path $settingsPath) {
+        Write-host "Downloading up settings.json"
+        Copy-Item $settingsPath $codeUserDirectory -Force
+    }
+    $snippetDirectory = "$syncRoot\snippets"
+    if (test-path $snippetDirectory) {
+        Write-host "Backing up snippets"
+        Robocopy.exe $snippetDirectory "$codeUserDirectory\snippets" /mir
+    }
 }
 
 function set-vssync{
@@ -60,4 +104,4 @@ function set-pssync{
     set-sync $syncRoot $codeUserDirectory    
 }
 
-export-modulemember set-pssync,set-vscodesync,set-vssync
+export-modulemember set-pssync, set-vssync, backup-vscodesettings, restore-vscodesettings
